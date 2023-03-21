@@ -11,6 +11,7 @@
 #define INVALID_CMD -2			// if an invalid command was found  
 #define CMD_NOT_EXECUTED -3		// if a CS error is detected (command not executed)
 #define STRING_FORMAT_WRONG -4  // if string format is wrong     
+#define INV_MESSAGE -5			// trama corrompida (cardinal nao apareceu)
 
 /* Function prototypes */
 int cmdProcessor(void);
