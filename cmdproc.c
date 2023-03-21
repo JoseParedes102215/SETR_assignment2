@@ -40,13 +40,14 @@ int cmdProcessor(void)
 	
 	/* Detect empty cmd string */
 	if(cmdStringLen == 0)
-		return -1; 
+		return CMD_EMPTY_STRING;  //  return -1
 	
 	/* Find index of SOF */
 	for(i=0; i < cmdStringLen; i++) {
 		if(cmdString[i] == SOF_SYM) {
 			break;
 		}
+		return INV_MESSAGE;
 	}
 	
 	/* If a SOF was found look for commands */
@@ -91,7 +92,7 @@ int newCmdChar(unsigned char newChar)
 }
 
 /* ************************** */
-/* Resets the commanbd string */  
+/* Resets the command string */  
 /* ************************** */
 void resetCmdString(void)
 {

@@ -7,6 +7,9 @@
 #define MAX_CMDSTRING_SIZE 10 /* Maximum size of the command string */ 
 #define SOF_SYM '#'	          /* Start of Frame Symbol */
 #define EOF_SYM '!'           /* End of Frame Symbol */
+#define CMD_EMPTY_STRING -1 
+#define INV_MESSAGE -5
+
 
 /* Function prototypes */
 int cmdProcessor(void);
