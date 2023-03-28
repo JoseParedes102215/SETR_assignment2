@@ -34,10 +34,16 @@ void tearDown(void)
 
 }
 
+/**
+@brief Testa o caso de processar um array vazio
+*/
 void test_cmdProcessor_emptyString(void){
     TEST_ASSERT_EQUAL(CMD_EMPTY_STRING, cmdProcessor());
 }
 
+/**
+@brief Testa a inserção de um caracter
+*/
 void test_newCmdChar_success(void){
     resetCmdString();
     TEST_ASSERT_EQUAL(0, newCmdChar('#'));
@@ -46,6 +52,9 @@ void test_newCmdChar_success(void){
     TEST_ASSERT_EQUAL(1, cmdStringLength());
 }
 
+/**
+@brief Testa a limpeza do array
+*/
 void test_resetCmdString(void){
     resetCmdString();
     newCmdChar('A');
@@ -55,6 +64,10 @@ void test_resetCmdString(void){
     TEST_ASSERT_EQUAL('\0', cmdString[0]);
 }
 
+/**
+@brief Testa a inserção de um caracter quando 
+        o array está cheio
+*/
 void test_newCmdChar_full(void){
     resetCmdString();
     // enche o array com 10 elementos
@@ -64,13 +77,25 @@ void test_newCmdChar_full(void){
     TEST_ASSERT_EQUAL(CMD_STRING_FULL, newCmdChar('B'));
 }
 
+/**
+@brief Processa um array sem o SOF_SYM (i.e. #)
+*/
 void test_cmdProcessor_NoHastag(void){
     resetCmdString();
     newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'3'));
+    newCmdChar('!');
     TEST_ASSERT_EQUAL(SOF_SYM_NOT_FOUND, cmdProcessor());
     //PrintCmdString();
 }
 
+/**
+@brief Processa um array com ordem invalida ou caracteres
+        invalidos (caso mais abrangente)
+*/
 void test_cmdProcessor_invalidMessage(void){
     resetCmdString();
     //PrintCmdString();
@@ -81,9 +106,7 @@ void test_cmdProcessor_invalidMessage(void){
     newCmdChar('P');
     //PrintCmdString();
     TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
-}
 
-void test_cmdProcessor_invalid_command(void) {
     resetCmdString();
     newCmdChar('#');
     newCmdChar('X');
@@ -134,7 +157,6 @@ int main(void){
     RUN_TEST(test_newCmdChar_full);
     RUN_TEST(test_cmdProcessor_NoHastag);
     RUN_TEST(test_cmdProcessor_invalidMessage);
-    RUN_TEST(test_cmdProcessor_invalid_command);
     RUN_TEST(test_cmdProcessor_PCommand);
     RUN_TEST(test_cmdProcessor_SCommand);
     UNITY_END();
