@@ -15,6 +15,10 @@ int setpoint, output, error;
 static char cmdString[MAX_CMDSTRING_SIZE];
 static unsigned char cmdStringLen = 0;
 
+
+/**
+@brief Inicialização das variaveis
+*/
 void setUp(void){
     // inicializacao das variaveis
     Kp = 0;
@@ -92,22 +96,6 @@ void test_cmdProcessor_NoHastag(void){
     //PrintCmdString();
 }
 
-void test_cmdProcessor_NoEOF(void){
-    resetCmdString();
-    newCmdChar('#');
-    newCmdChar('P');
-    newCmdChar('1');
-    newCmdChar('2');
-    newCmdChar('3');
-    newCmdChar((unsigned char)('P'+'1'+'2'+'3'));
-    newCmdChar('r');
-    TEST_ASSERT_EQUAL(EOF_SYM_NOT_FOUND, cmdProcessor());
-    
-}
-
-
-
-
 /**
 @brief Processa um array com ordem invalida ou caracteres
         invalidos (caso mais abrangente)
@@ -131,8 +119,20 @@ void test_cmdProcessor_invalidMessage(void){
     newCmdChar('!');
     //PrintCmdString();
     TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
+
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('Z');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('!');
+    //PrintCmdString();
+    TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
 }
 
+/**
+@brief Testa o comando "P"
+*/
 void test_cmdProcessor_PCommand(void){
     resetCmdString();
     newCmdChar('#');
@@ -149,6 +149,9 @@ void test_cmdProcessor_PCommand(void){
     TEST_ASSERT_EQUAL('3', Td);
 }
 
+/**
+@brief Testa o comando "S"
+*/
 void test_cmdProcessor_SCommand(void){
     resetCmdString();
     setpoint = 10;
@@ -161,12 +164,80 @@ void test_cmdProcessor_SCommand(void){
     // verificar se o printf foi executado corretamente
 }
 
-/* to do:
-- verficar o checksum
+/**
+@brief Testa a checksum do comando "P"
 */
+void test_cmdProcessor_PCommand_Checksum(void){
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'5'));
+    newCmdChar('!');
+    TEST_ASSERT_EQUAL(CMD_CS_ERROR, cmdProcessor());
+}
 
+/**
+@brief Testa a estrutura do comando "P"
+*/
+void test_cmdProcessor_PCommand_FramingError(void){
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    newCmdChar('4');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'5'));
+    newCmdChar('!');
+    TEST_ASSERT_EQUAL(FRAMING_ERROR, cmdProcessor());
 
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    //newCmdChar('4');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'3'));
+    newCmdChar('!');
+    TEST_ASSERT_EQUAL(0, cmdProcessor());
+}
 
+/**
+@brief Testa a estrutura do comando "S"
+*/
+void test_cmdProcessor_SCommand_FramingError(void){
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('S');
+    newCmdChar('!');
+    TEST_ASSERT_EQUAL(0, cmdProcessor());
+
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('S');
+    newCmdChar('S');
+    newCmdChar('!');
+    TEST_ASSERT_EQUAL(FRAMING_ERROR, cmdProcessor());
+}
+
+/**
+@brief Testa a existencia de EOF_SYM (!)
+*/
+void test_cmdProcessor_NoEOF(void){
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'3'));
+    newCmdChar('r');
+    TEST_ASSERT_EQUAL(EOF_SYM_NOT_FOUND, cmdProcessor());   
+}
 
 int main(void){
     UNITY_BEGIN();
@@ -178,6 +249,11 @@ int main(void){
     RUN_TEST(test_cmdProcessor_invalidMessage);
     RUN_TEST(test_cmdProcessor_PCommand);
     RUN_TEST(test_cmdProcessor_SCommand);
+
+    RUN_TEST(test_cmdProcessor_PCommand_Checksum);
+    RUN_TEST(test_cmdProcessor_PCommand_FramingError);
+    RUN_TEST(test_cmdProcessor_SCommand_FramingError);
+
     RUN_TEST(test_cmdProcessor_NoEOF);
     UNITY_END();
 
