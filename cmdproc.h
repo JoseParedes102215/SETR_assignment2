@@ -23,6 +23,7 @@
 #define CMD_CS_ERROR -5			// erro no checksum
 #define FRAMING_ERROR -6        // erro na estrutura do comando
 #define INV_MSG -7
+#define EOF_SYM_NOT_FOUND -8
 
 /* Function prototypes */
 
