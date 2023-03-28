@@ -57,7 +57,7 @@ void test_newCmdChar_success(void){
 }
 
 /**
-@brief Testa a limpeza do array
+@brief Testa a "limpeza" do array
 */
 void test_resetCmdString(void){
     resetCmdString();
@@ -97,20 +97,10 @@ void test_cmdProcessor_NoHastag(void){
 }
 
 /**
-@brief Processa um array com ordem invalida ou caracteres
-        invalidos (caso mais abrangente)
+@brief Processa uma mensagem com o campo CMD com caracteres errados
+        (CMD != 'P' && 'S')
 */
-void test_cmdProcessor_invalidMessage(void){
-    resetCmdString();
-    //PrintCmdString();
-    newCmdChar('9');
-    newCmdChar('#');
-    newCmdChar('2');
-    newCmdChar('3');
-    newCmdChar('!');
-    //PrintCmdString();
-    TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
-
+void test_cmdProcessor_invalidCMD(void){
     resetCmdString();
     newCmdChar('#');
     newCmdChar('X');
@@ -246,7 +236,7 @@ int main(void){
     RUN_TEST(test_resetCmdString);
     RUN_TEST(test_newCmdChar_full);
     RUN_TEST(test_cmdProcessor_NoHastag);
-    RUN_TEST(test_cmdProcessor_invalidMessage);
+    RUN_TEST(test_cmdProcessor_invalidCMD);
     RUN_TEST(test_cmdProcessor_PCommand);
     RUN_TEST(test_cmdProcessor_SCommand);
 

@@ -70,7 +70,7 @@ int cmdProcessor(void)
 			Ti = cmdString[i+3];
 			Td = cmdString[i+4];
 			int cs_calculado = (unsigned char)('P'+cmdString[i+2] + cmdString[i+3] + cmdString[i+4]);
-			int cs_received =(unsigned char)cmdString[i+5];
+			int cs_received = (unsigned char)cmdString[i+5];
 			if (cs_received != cs_calculado){
 				return CMD_CS_ERROR;
 			}
@@ -97,7 +97,6 @@ int cmdProcessor(void)
 	else{
 		return SOF_SYM_NOT_FOUND;
 	}
-	return INV_MSG;
 }
 
 /* ******************************** */
