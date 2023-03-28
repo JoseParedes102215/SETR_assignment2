@@ -52,25 +52,41 @@ int cmdProcessor(void)
 	/* If a SOF was found look for commands */
 	if(i < cmdStringLen) {
 		if(cmdString[i+1] == 'P') { /* P command detected */
+			if (cmdString[i] != '#' || cmdString[i+6] !='!'){
+				return FRAMING_ERROR;
+			}
 			Kp = cmdString[i+2];
 			Ti = cmdString[i+3];
 			Td = cmdString[i+4];
+			int cs_calculado = (unsigned char)('P'+cmdString[i+2] + cmdString[i+3] + cmdString[i+4]);
+			int cs_received =(unsigned char)cmdString[i+5];
+			if (cs_received != cs_calculado){
+				return CMD_CS_ERROR;
+			}
+			//printf("%d\n",(unsigned char)cmdString[i+5]);
+			//printf("%d\n",(unsigned char)('P'+cmdString[i+2] + cmdString[i+3] + cmdString[i+4]));
 			resetCmdString();
 			return 0;
 		}
 		
 		if(cmdString[i+1] == 'S') { /* S command detected */
+			if (cmdString[i] != '#' || cmdString[i+2] !='!'){
+				return FRAMING_ERROR;
+			}
 			printf("Setpoint = %d, Output = %d, Error = %d\n", setpoint, output, error);
 			resetCmdString();
 			return 0;
 		}
 		else{
 			return INVALID_CMD;
-		}	
+		}
 	}
 	
 	/* cmd string not null and SOF not found */
-	return SOF_SYM_NOT_FOUND;
+	else{
+		return SOF_SYM_NOT_FOUND;
+	}
+	return INV_MSG;
 }
 
 /* ******************************** */

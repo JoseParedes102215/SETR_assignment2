@@ -20,7 +20,9 @@
 #define INVALID_CMD -2			// if an invalid command was found  
 #define SOF_SYM_NOT_FOUND -3  	// if "#" is not found
 #define CMD_STRING_FULL -4		// excedido o numero maximo de caracteres para um comando
-//#define CMD_CS_ERROR -5			// erro no checksum
+#define CMD_CS_ERROR -5			// erro no checksum
+#define FRAMING_ERROR -6        // erro na estrutura do comando
+#define INV_MSG -7
 
 /* Function prototypes */
 
