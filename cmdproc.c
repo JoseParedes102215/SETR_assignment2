@@ -36,7 +36,8 @@ static unsigned char cmdStringLen = 0;
 /* ************************************************************ */
 int cmdProcessor(void)
 {
-    int i;
+    int i,j;
+	int flag_EOF = 0;
 
     /* Detect empty cmd string */
     if(cmdStringLen == 0)
@@ -46,11 +47,23 @@ int cmdProcessor(void)
     for(i=0; i < cmdStringLen; i++) {
         if(cmdString[i] == SOF_SYM) {
             break;
-        }
+		}
+    }
+
+	for(j=0; j < cmdStringLen; j++) {
+        if(cmdString[j] == EOF_SYM) {
+			flag_EOF = 1;
+            break;
+		}
     }
 	
+	
+
 	/* If a SOF was found look for commands */
-	if(i < cmdStringLen) {
+	if(i < cmdStringLen ) {
+		if(flag_EOF != 1){
+			return EOF_SYM_NOT_FOUND;
+		}
 		if(cmdString[i+1] == 'P') { /* P command detected */
 			Kp = cmdString[i+2];
 			Ti = cmdString[i+3];
@@ -66,11 +79,24 @@ int cmdProcessor(void)
 		}
 		else{
 			return INVALID_CMD;
-		}	
+		}
 	}
 	
-	/* cmd string not null and SOF not found */
-	return SOF_SYM_NOT_FOUND;
+	else{
+		
+	
+		/* cmd string not null and SOF not found */
+		return SOF_SYM_NOT_FOUND;
+		}
+	
+	
+
+
+	
+	
+
+	
+	
 }
 
 /* ******************************** */

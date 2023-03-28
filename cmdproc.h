@@ -21,6 +21,7 @@
 #define SOF_SYM_NOT_FOUND -3  	// if "#" is not found
 #define CMD_STRING_FULL -4		// excedido o numero maximo de caracteres para um comando
 //#define CMD_CS_ERROR -5			// erro no checksum
+#define EOF_SYM_NOT_FOUND -7
 
 /* Function prototypes */
 

@@ -92,6 +92,22 @@ void test_cmdProcessor_NoHastag(void){
     //PrintCmdString();
 }
 
+void test_cmdProcessor_NoEOF(void){
+    resetCmdString();
+    newCmdChar('#');
+    newCmdChar('P');
+    newCmdChar('1');
+    newCmdChar('2');
+    newCmdChar('3');
+    newCmdChar((unsigned char)('P'+'1'+'2'+'3'));
+    newCmdChar('r');
+    TEST_ASSERT_EQUAL(EOF_SYM_NOT_FOUND, cmdProcessor());
+    
+}
+
+
+
+
 /**
 @brief Processa um array com ordem invalida ou caracteres
         invalidos (caso mais abrangente)
@@ -103,7 +119,7 @@ void test_cmdProcessor_invalidMessage(void){
     newCmdChar('#');
     newCmdChar('2');
     newCmdChar('3');
-    newCmdChar('P');
+    newCmdChar('!');
     //PrintCmdString();
     TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
 
@@ -112,7 +128,7 @@ void test_cmdProcessor_invalidMessage(void){
     newCmdChar('X');
     newCmdChar('Y');
     newCmdChar('Z');
-    newCmdChar('3');
+    newCmdChar('!');
     //PrintCmdString();
     TEST_ASSERT_EQUAL(INVALID_CMD, cmdProcessor());
 }
@@ -149,6 +165,9 @@ void test_cmdProcessor_SCommand(void){
 - verficar o checksum
 */
 
+
+
+
 int main(void){
     UNITY_BEGIN();
     RUN_TEST(test_cmdProcessor_emptyString);
@@ -159,6 +178,7 @@ int main(void){
     RUN_TEST(test_cmdProcessor_invalidMessage);
     RUN_TEST(test_cmdProcessor_PCommand);
     RUN_TEST(test_cmdProcessor_SCommand);
+    RUN_TEST(test_cmdProcessor_NoEOF);
     UNITY_END();
 
     return 0;
