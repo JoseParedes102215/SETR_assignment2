@@ -9,13 +9,15 @@
 #define EOF_SYM '!'           /* End of Frame Symbol */
 #define CMD_EMPTY_STRING -1		// if empty string or incomplete command found
 #define INVALID_CMD -2			// if an invalid command was found  
-#define CMD_NOT_EXECUTED -3		// if a CS error is detected (command not executed)
-#define STRING_FORMAT_WRONG -4  // if string format is wrong     
-#define INV_MESSAGE -5			// trama corrompida (cardinal nao apareceu)
+#define SOF_SYM_NOT_FOUND -3  	// if "#" is not found
+#define CMD_STRING_FULL -4		// excedido o numero maximo de caracteres para um comando
+//#define CMD_CS_ERROR -5			// erro no checksum
 
 /* Function prototypes */
 int cmdProcessor(void);
 int newCmdChar(unsigned char newChar);
 void resetCmdString(void);
+void PrintCmdString(void);
+int cmdStringLength(void);
 
 #endif

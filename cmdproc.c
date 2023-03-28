@@ -36,19 +36,18 @@ static unsigned char cmdStringLen = 0;
 /* ************************************************************ */
 int cmdProcessor(void)
 {
-	int i;
-	
-	/* Detect empty cmd string */
-	if(cmdStringLen == 0)
-		return CMD_EMPTY_STRING;  //  return -1
-	
-	/* Find index of SOF */
-	for(i=0; i < cmdStringLen; i++) {
-		if(cmdString[i] == SOF_SYM) {
-			break;
-		}
-		return INV_MESSAGE;
-	}
+    int i;
+
+    /* Detect empty cmd string */
+    if(cmdStringLen == 0)
+        return CMD_EMPTY_STRING;
+
+    /* Find index of SOF */
+    for(i=0; i < cmdStringLen; i++) {
+        if(cmdString[i] == SOF_SYM) {
+            break;
+        }
+    }
 	
 	/* If a SOF was found look for commands */
 	if(i < cmdStringLen) {
@@ -61,14 +60,17 @@ int cmdProcessor(void)
 		}
 		
 		if(cmdString[i+1] == 'S') { /* S command detected */
-			printf("Setpoint = %d, Output = %d, Error = %d", setpoint, output, error);
+			printf("Setpoint = %d, Output = %d, Error = %d\n", setpoint, output, error);
 			resetCmdString();
 			return 0;
-		}		
+		}
+		else{
+			return INVALID_CMD;
+		}	
 	}
 	
 	/* cmd string not null and SOF not found */
-	return STRING_FORMAT_WRONG;
+	return SOF_SYM_NOT_FOUND;
 }
 
 /* ******************************** */
@@ -82,21 +84,29 @@ int newCmdChar(unsigned char newChar)
 	/* If cmd string not full add char to it */
 	if (cmdStringLen < MAX_CMDSTRING_SIZE) {
 		cmdString[cmdStringLen] = newChar;
-		cmdStringLen +=1;
+		cmdStringLen = cmdStringLen +1;
 		return 0;		
 	}
 	
 	/* If cmd string full return error */
-	else if (cmdStringLen == MAX_CMDSTRING_SIZE){
+	else{
 		return CMD_STRING_FULL;
 	}
 }
 
-/* ************************** */
-/* Resets the command string */  
-/* ************************** */
 void resetCmdString(void)
 {
 	cmdStringLen = 0;		
 	return;
+}
+
+void PrintCmdString(void){
+	for(int i=0; i < cmdStringLen; i++) {
+		printf("%c ",cmdString[i]);
+	}
+	printf("\n");
+}
+
+int cmdStringLength(void){
+	return cmdStringLen;
 }
