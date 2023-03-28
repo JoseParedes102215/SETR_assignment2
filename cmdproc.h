@@ -1,3 +1,12 @@
+/**
+
+@file cmdproc.h
+@brief header das funçoes de processamento
+
+ @author José Paredes Manuel Miranda
+ @date 28 March 2023
+*/
+
 #ifndef __CMD_PROC_H_
 #define __CMD_PROC_H_
 
@@ -14,10 +23,38 @@
 //#define CMD_CS_ERROR -5			// erro no checksum
 
 /* Function prototypes */
+
+/**
+@brief processa um array de caracteres
+@return CMD_EMPTY_STRING se vazio
+@return 0 se sucesso
+@return INVALID_CMD se o comando processado é invalido
+@return SOF_SYM_NOT_FOUND se nao foi encontrado #
+*/
 int cmdProcessor(void);
+
+/**
+@brief Envia um caracter para o array
+@param newChar Caracter a ser enviado
+@return 0 se tiver sucesso
+@return CMD_STRING_FULL se o array estiver cheio
+*/
 int newCmdChar(unsigned char newChar);
+
+/**
+@brief Repõe o array
+*/
 void resetCmdString(void);
+
+/**
+@brief Imprime o conteudo do array
+*/
 void PrintCmdString(void);
+
+/**
+@brief Verifica o numero de caracteres a serem processados
+@return Tamanho atual do array
+*/
 int cmdStringLength(void);
 
 #endif
