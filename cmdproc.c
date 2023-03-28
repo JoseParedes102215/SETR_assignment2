@@ -83,20 +83,9 @@ int cmdProcessor(void)
 	}
 	
 	else{
-		
-	
 		/* cmd string not null and SOF not found */
 		return SOF_SYM_NOT_FOUND;
-		}
-	
-	
-
-
-	
-	
-
-	
-	
+		}	
 }
 
 /* ******************************** */
